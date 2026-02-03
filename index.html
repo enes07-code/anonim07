@@ -24,176 +24,188 @@
             touch-action: none;
         }
 
-        /* Bulanıklaşma Efekti İçin */
         #mainWrapper {
             width: 100%; height: 100%;
             display: flex; align-items: center; justify-content: center;
-            transition: filter 0.5s ease;
+            transition: filter 0.4s ease;
         }
 
         .container {
             position: relative; z-index: 1; text-align: center;
-            background: var(--beyaz); padding: 30px 20px;
+            background: var(--beyaz); padding: 25px;
             border-radius: 40px; box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            width: 85%; max-width: 380px;
+            width: 90%; max-width: 380px;
         }
 
+        /* Kart Alanı */
         .kedi-cerceve {
-            width: 240px; height: 300px;
-            margin: 20px auto;
+            width: 100%; height: 320px;
+            margin: 15px auto;
             border-radius: 20px;
             overflow: hidden;
-            border: 5px solid white;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border: 4px solid white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             background: white;
-            position: relative;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.4s ease;
         }
 
         #kediResmi { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 
-        /* Kaydırma metinleri */
-        #swipeText {
+        /* İtiraf Yazısı Odak Noktası */
+        #itirafMetni {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 15px 0;
+            min-height: 50px;
+            color: var(--yazi-renk);
+        }
+
+        /* Kaydırma Efekt Yazıları */
+        #swipeOverlay {
             position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 3rem; font-weight: bold;
+            font-size: 2.5rem; font-weight: 900;
             z-index: 100; pointer-events: none;
-            display: none; text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
-            animation: popIn 0.5s ease;
+            display: none; text-align: center;
+            text-shadow: 0 0 20px rgba(255,255,255,0.8);
+            animation: pop 0.4s ease;
         }
 
-        @keyframes popIn { 0% { scale: 0; opacity: 0; } 100% { scale: 1.2; opacity: 1; } }
+        @keyframes pop { 0% { scale: 0.5; opacity: 0; } 100% { scale: 1; opacity: 1; } }
 
-        /* Siyah Final Ekranı */
+        /* Alt Talimat Yazısı */
+        .talimat { font-size: 0.75rem; opacity: 0.7; margin-top: 10px; }
+
+        /* Final Ekranı */
         #finalScreen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: black; color: white;
+            background: #000; color: #fff;
             display: none; flex-direction: column;
             align-items: center; justify-content: center;
-            z-index: 200; text-align: center; padding: 20px;
+            z-index: 200; text-align: center; padding: 30px;
         }
 
-        #finalScreen h2 { color: #ffafbd; font-size: 2rem; }
-        .small-text { font-size: 0.8rem; margin-top: 30px; opacity: 0.6; }
-
-        .heart { position: absolute; color: #ff4b2b; animation: fly 3s linear forwards; z-index: 50; }
-        @keyframes fly { from { transform: translateY(100vh) scale(0); opacity: 1; } to { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
+        .heart { position: absolute; color: #ff4b2b; animation: fly 3s linear forwards; }
+        @keyframes fly { from { transform: translateY(100vh); opacity: 1; } to { transform: translateY(-10vh); opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <div id="swipeText"></div>
+    <div id="swipeOverlay"></div>
 
     <div id="mainWrapper">
         <div id="heartContainer"></div>
         <div class="container">
-            <h1 style="font-size: 1.4rem;">Sana Özel Cimcime 💞</h1>
-            <div id="mesaj" style="font-size: 0.9rem; margin-bottom: 10px;">
-                Beğendiğin iltifatları sağa kaydır "Ya seni yerim :)" <br>
-                Beğenmediklerini sola kaydır "Bune aq"
-            </div>
+            <h2 style="margin: 0; font-size: 1.2rem;">Sana Özel Cimcime 💞</h2>
+            
             <div class="kedi-cerceve" id="kediKarti">
                 <img id="kediResmi" src="https://api.imghippo.com/files/ukM4075mOo.jpg">
             </div>
-            <p id="counterDisplay">1 / 4</p>
+
+            <div id="itirafMetni">Yükleniyor...</div>
+
+            <div class="talimat">
+                Beğendiysen sağa (Ya seni yerim :) ) <br>
+                Beğenmediysen sola (Bune aq) kaydır
+            </div>
+            <p id="counter" style="font-size: 0.8rem; margin-top: 10px; opacity: 0.5;">1 / 4</p>
         </div>
     </div>
 
     <div id="finalScreen">
-        <h2 id="finalScore">Beğeni Oranı: %100</h2>
-        <p id="finalNote" style="font-size: 1.2rem; margin: 20px 0;"></p>
-        <p class="small-text">tekrar için ekranı yenile</p>
+        <h1 id="scorePerc" style="color: #ffafbd; font-size: 3rem;">%100</h1>
+        <p id="finalMsg" style="font-size: 1.3rem; line-height: 1.6;"></p>
+        <p style="font-size: 0.7rem; opacity: 0.4; margin-top: 40px;">tekrar için ekranı yenile</p>
     </div>
 
-    <audio id="arkaPlanMuzik" loop><source src="audi.mp3" type="audio/mpeg"></audio>
+    <audio id="bgMusic" loop><source src="audi.mp3" type="audio/mpeg"></audio>
 
     <script>
-        const kediResimleri = [
-            "https://api.imghippo.com/files/ukM4075mOo.jpg",
-            "https://api.imghippo.com/files/5932Hs.jpg",
-            "https://api.imghippo.com/files/vNyz8896KDE.jpg",
-            "https://api.imghippo.com/files/ZRFT3254fWQ.jpg"
+        const icerik = [
+            { img: "https://api.imghippo.com/files/ukM4075mOo.jpg", msg: "Bu site sadece senin yüzünü güldürmek için kodlandı! ✨" },
+            { img: "https://api.imghippo.com/files/5932Hs.jpg", msg: "Dünyanın en tatlı kişisine küçük bir kedi selamı... 🐱" },
+            { img: "https://api.imghippo.com/files/vNyz8896KDE.jpg", msg: "Moralin bozulduğunda bu linke gel, hep buradayız. 🐾" },
+            { img: "https://api.imghippo.com/files/ZRFT3254fWQ.jpg", msg: "Gülümsemek sana dünyadaki her şeyden çok yakışıyor! 😊" }
         ];
 
-        let currentIndex = 0;
-        let likes = 0;
-        let startX = 0;
-        let muzikCalıyor = false;
+        let index = 0, likes = 0, startX = 0, musicStarted = false;
+        const card = document.getElementById('kediKarti');
+        const itiraf = document.getElementById('itirafMetni');
+        const overlay = document.getElementById('swipeOverlay');
+        const wrapper = document.getElementById('mainWrapper');
 
-        const kart = document.getElementById('kediKarti');
-        const mainWrapper = document.getElementById('mainWrapper');
-        const swipeText = document.getElementById('swipeText');
+        // İlk içeriği yükle
+        itiraf.innerText = icerik[0].msg;
 
-        function startInteraction(e) {
+        function start(e) {
             startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-            if(!muzikCalıyor) { document.getElementById('arkaPlanMuzik').play(); muzikCalıyor = true; }
+            if(!musicStarted) { document.getElementById('bgMusic').play(); musicStarted = true; }
         }
 
-        function endInteraction(e) {
+        function end(e) {
             let endX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
             let diff = endX - startX;
 
-            if (Math.abs(diff) > 70) {
-                if (diff > 0) handleSwipe('right');
-                else handleSwipe('left');
+            if (Math.abs(diff) > 60) {
+                if (diff > 0) handle('right');
+                else handle('left');
             }
         }
 
-        function handleSwipe(dir) {
+        function handle(dir) {
             if(dir === 'right') {
                 likes++;
-                showReaction("Ya seni yerim :)", "#ff4b2b");
-                createHeartEffect();
+                showEffect("Ya seni yerim :)", "#ff4b2b");
+                hearts();
             } else {
-                showReaction("Bune aq", "#555555");
+                showEffect("Bune aq", "#666");
             }
 
-            currentIndex++;
-            if (currentIndex < 4) {
+            index++;
+            if (index < 4) {
                 setTimeout(() => {
-                    document.getElementById('kediResmi').src = kediResimleri[currentIndex];
-                    document.getElementById('counterDisplay').innerText = (currentIndex + 1) + " / 4";
+                    document.getElementById('kediResmi').src = icerik[index].img;
+                    itiraf.innerText = icerik[index].msg;
+                    document.getElementById('counter').innerText = (index + 1) + " / 4";
                 }, 300);
             } else {
-                setTimeout(showFinal, 800);
+                setTimeout(finish, 700);
             }
         }
 
-        function showReaction(text, color) {
-            swipeText.innerText = text;
-            swipeText.style.color = color;
-            swipeText.style.display = 'block';
-            mainWrapper.style.filter = "blur(8px)";
-            
-            setTimeout(() => {
-                swipeText.style.display = 'none';
-                mainWrapper.style.filter = "none";
+        function showEffect(txt, col) {
+            overlay.innerText = txt;
+            overlay.style.color = col;
+            overlay.style.display = 'block';
+            wrapper.style.filter = "blur(10px)";
+            setTimeout(() => { 
+                overlay.style.display = 'none'; 
+                wrapper.style.filter = "none";
             }, 600);
         }
 
-        function showFinal() {
-            const ratio = (likes / 4) * 100;
+        function finish() {
+            const perc = (likes / 4) * 100;
             document.getElementById('finalScreen').style.display = 'flex';
-            document.getElementById('finalScore').innerText = "Beğeni Oranı: %" + ratio;
-            document.getElementById('finalNote').innerText = "Cimcime seni ne kadar mutlu ettiysem ne mutlu bana 👾🎉";
+            document.getElementById('scorePerc').innerText = "%" + perc;
+            document.getElementById('finalMsg').innerText = "Cimcime seni ne kadar mutlu ettiysem ne mutlu bana 👾🎉";
         }
 
-        function createHeartEffect() {
-            const container = document.getElementById('heartContainer');
+        function hearts() {
             for(let i=0; i<8; i++) {
-                const heart = document.createElement('div');
-                heart.classList.add('heart');
-                heart.innerHTML = '❤️';
-                heart.style.left = Math.random() * 100 + 'vw';
-                container.appendChild(heart);
-                setTimeout(() => heart.remove(), 3000);
+                const h = document.createElement('div');
+                h.className = 'heart'; h.innerHTML = '❤️';
+                h.style.left = Math.random() * 100 + 'vw';
+                document.body.appendChild(h);
+                setTimeout(() => h.remove(), 3000);
             }
         }
 
-        kart.addEventListener('mousedown', startInteraction);
-        kart.addEventListener('mouseup', endInteraction);
-        kart.addEventListener('touchstart', startInteraction);
-        kart.addEventListener('touchend', endInteraction);
+        card.addEventListener('mousedown', start);
+        card.addEventListener('mouseup', end);
+        card.addEventListener('touchstart', start);
+        card.addEventListener('touchend', end);
     </script>
 </body>
-</html>
+    </html>
+    
