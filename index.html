@@ -3,30 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sana Bir Sürprizim Var! 🐾</title>
+    <title>Sana Özel Cimcime 💞</title>
     <style>
         :root {
             --ana-renk: #ffafbd;
             --ara-renk: #ffc3a0;
             --yazi-renk: #6d4c41;
-            --beyaz: rgba(255, 255, 255, 0.9);
+            --beyaz: rgba(255, 255, 255, 0.95);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             margin: 0; padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, var(--ana-renk), var(--ara-renk));
             height: 100vh;
             display: flex; align-items: center; justify-content: center;
             overflow: hidden; color: var(--yazi-renk);
-            touch-action: none; /* Kaydırma işlemi için tarayıcı kaydırmasını kapatır */
+            touch-action: none;
         }
 
-        #heartContainer {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0; pointer-events: none;
+        /* Bulanıklaşma Efekti İçin */
+        #mainWrapper {
+            width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            transition: filter 0.5s ease;
         }
 
         .container {
@@ -34,18 +36,10 @@
             background: var(--beyaz); padding: 30px 20px;
             border-radius: 40px; box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             width: 85%; max-width: 380px;
-            backdrop-filter: blur(15px); border: 2px solid white;
-            animation: bounceIn 1s ease;
         }
 
-        @keyframes bounceIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* Dörtgen Kaydırılabilir Kart Tasarımı */
         .kedi-cerceve {
-            width: 240px; height: 280px;
+            width: 240px; height: 300px;
             margin: 20px auto;
             border-radius: 20px;
             overflow: hidden;
@@ -53,62 +47,65 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
             background: white;
             position: relative;
-            cursor: grab;
-            transition: transform 0.1s ease, opacity 0.3s ease;
-            user-select: none;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        #kediResmi {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            pointer-events: none;
+        #kediResmi { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+
+        /* Kaydırma metinleri */
+        #swipeText {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem; font-weight: bold;
+            z-index: 100; pointer-events: none;
+            display: none; text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            animation: popIn 0.5s ease;
         }
 
-        #mesaj {
-            min-height: 60px; font-size: 1.1rem; font-weight: 600;
-            line-height: 1.4; margin-bottom: 25px;
-            transition: color 0.3s ease;
+        @keyframes popIn { 0% { scale: 0; opacity: 0; } 100% { scale: 1.2; opacity: 1; } }
+
+        /* Siyah Final Ekranı */
+        #finalScreen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: black; color: white;
+            display: none; flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 200; text-align: center; padding: 20px;
         }
 
-        .buton {
-            background: var(--yazi-renk); color: white; border: none;
-            padding: 18px; border-radius: 50px; font-size: 1.1rem;
-            font-weight: bold; width: 100%; cursor: pointer;
-            box-shadow: 0 8px 20px rgba(109, 76, 65, 0.3);
-        }
+        #finalScreen h2 { color: #ffafbd; font-size: 2rem; }
+        .small-text { font-size: 0.8rem; margin-top: 30px; opacity: 0.6; }
 
-        .buton:active { transform: scale(0.95); }
-
-        .heart {
-            position: absolute; color: #ff4b2b; animation: fly linear forwards;
-            z-index: 0;
-        }
-
-        @keyframes fly {
-            from { transform: translateY(100vh) scale(0); opacity: 1; }
-            to { transform: translateY(-10vh) scale(1.5); opacity: 0; }
-        }
+        .heart { position: absolute; color: #ff4b2b; animation: fly 3s linear forwards; z-index: 50; }
+        @keyframes fly { from { transform: translateY(100vh) scale(0); opacity: 1; } to { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <div id="heartContainer"></div>
+    <div id="swipeText"></div>
 
-    <div class="container">
-        <h1>Sana Özel Cimcime 💞</h1>
-        
-        <div class="kedi-cerceve" id="kediKarti">
-            <img id="kediResmi" src="https://api.imghippo.com/files/ukM4075mOo.jpg" alt="Kedi">
+    <div id="mainWrapper">
+        <div id="heartContainer"></div>
+        <div class="container">
+            <h1 style="font-size: 1.4rem;">Sana Özel Cimcime 💞</h1>
+            <div id="mesaj" style="font-size: 0.9rem; margin-bottom: 10px;">
+                Beğendiğin iltifatları sağa kaydır "Ya seni yerim :)" <br>
+                Beğenmediklerini sola kaydır "Bune aq"
+            </div>
+            <div class="kedi-cerceve" id="kediKarti">
+                <img id="kediResmi" src="https://api.imghippo.com/files/ukM4075mOo.jpg">
+            </div>
+            <p id="counterDisplay">1 / 4</p>
         </div>
-
-        <div id="mesaj">Resmi sağa veya sola kaydır! <br>Veya tıkla 🐾</div>
-        
-        <button class="buton" onclick="etkilesimBaslat()">Sıradaki 🐾</button>
     </div>
 
-    <audio id="arkaPlanMuzik" loop>
-        <source src="audi.mp3" type="audio/mpeg">
-    </audio>
+    <div id="finalScreen">
+        <h2 id="finalScore">Beğeni Oranı: %100</h2>
+        <p id="finalNote" style="font-size: 1.2rem; margin: 20px 0;"></p>
+        <p class="small-text">tekrar için ekranı yenile</p>
+    </div>
+
+    <audio id="arkaPlanMuzik" loop><source src="audi.mp3" type="audio/mpeg"></audio>
 
     <script>
         const kediResimleri = [
@@ -118,87 +115,85 @@
             "https://api.imghippo.com/files/ZRFT3254fWQ.jpg"
         ];
 
-        const mesajlar = [
-            "Bu site sadece senin için kodlandı! ✨",
-            "Dünyanın en tatlı kişisine selam... 🐱",
-            "Moralin bozulduğunda buraya gel. 🐾",
-            "Gülümsemek sana çok yakışıyor! 😊"
-        ];
-
-        let muzikCalıyor = false;
+        let currentIndex = 0;
+        let likes = 0;
         let startX = 0;
+        let muzikCalıyor = false;
+
         const kart = document.getElementById('kediKarti');
-        const mesajElementi = document.getElementById('mesaj');
+        const mainWrapper = document.getElementById('mainWrapper');
+        const swipeText = document.getElementById('swipeText');
 
-        // Müzik ve İçerik Değiştirme
-        function etkilesimBaslat() {
-            const muzik = document.getElementById('arkaPlanMuzik');
-            const resimElementi = document.getElementById('kediResmi');
+        function startInteraction(e) {
+            startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+            if(!muzikCalıyor) { document.getElementById('arkaPlanMuzik').play(); muzikCalıyor = true; }
+        }
 
-            if (!muzikCalıyor) {
-                muzik.play().catch(e => {});
-                muzikCalıyor = true;
+        function endInteraction(e) {
+            let endX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
+            let diff = endX - startX;
+
+            if (Math.abs(diff) > 70) {
+                if (diff > 0) handleSwipe('right');
+                else handleSwipe('left');
+            }
+        }
+
+        function handleSwipe(dir) {
+            if(dir === 'right') {
+                likes++;
+                showReaction("Ya seni yerim :)", "#ff4b2b");
+                createHeartEffect();
+            } else {
+                showReaction("Bune aq", "#555555");
             }
 
-            const rastgeleIndex = Math.floor(Math.random() * 4);
-            resimElementi.style.opacity = "0";
+            currentIndex++;
+            if (currentIndex < 4) {
+                setTimeout(() => {
+                    document.getElementById('kediResmi').src = kediResimleri[currentIndex];
+                    document.getElementById('counterDisplay').innerText = (currentIndex + 1) + " / 4";
+                }, 300);
+            } else {
+                setTimeout(showFinal, 800);
+            }
+        }
+
+        function showReaction(text, color) {
+            swipeText.innerText = text;
+            swipeText.style.color = color;
+            swipeText.style.display = 'block';
+            mainWrapper.style.filter = "blur(8px)";
             
             setTimeout(() => {
-                resimElementi.src = kediResimleri[rastgeleIndex];
-                mesajElementi.innerText = mesajlar[rastgeleIndex];
-                mesajElementi.style.color = "var(--yazi-renk)";
-                resimElementi.style.opacity = "1";
-            }, 200);
-
-            createHeartEffect();
+                swipeText.style.display = 'none';
+                mainWrapper.style.filter = "none";
+            }, 600);
         }
 
-        // SWIPE (KAYDIRMA) MANTIĞI
-        kart.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; });
-        kart.addEventListener('mousedown', (e) => { startX = e.clientX; });
-
-        kart.addEventListener('touchend', (e) => { handleSwipe(e.changedTouches[0].clientX); });
-        kart.addEventListener('mouseup', (e) => { handleSwipe(e.clientX); });
-
-        function handleSwipe(endX) {
-            const diff = endX - startX;
-            const threshold = 50; // Kaydırma hassasiyeti
-
-            if (diff > threshold) {
-                // SAĞA KAYDIRMA
-                mesajElementi.innerText = "Ya seni yerim :)";
-                mesajElementi.style.color = "#e91e63";
-                kart.style.transform = "translateX(100px) rotate(20deg)";
-                setTimeout(resetCard, 300);
-                createHeartEffect();
-            } else if (diff < -threshold) {
-                // SOLA KAYDIRMA
-                mesajElementi.innerText = "Bune aq";
-                mesajElementi.style.color = "#555";
-                kart.style.transform = "translateX(-100px) rotate(-20deg)";
-                setTimeout(resetCard, 300);
-            }
-        }
-
-        function resetCard() {
-            kart.style.transform = "translateX(0) rotate(0)";
-            // Yeni kedi getir
-            const resimElementi = document.getElementById('kediResmi');
-            resimElementi.src = kediResimleri[Math.floor(Math.random() * 4)];
+        function showFinal() {
+            const ratio = (likes / 4) * 100;
+            document.getElementById('finalScreen').style.display = 'flex';
+            document.getElementById('finalScore').innerText = "Beğeni Oranı: %" + ratio;
+            document.getElementById('finalNote').innerText = "Cimcime seni ne kadar mutlu ettiysem ne mutlu bana 👾🎉";
         }
 
         function createHeartEffect() {
             const container = document.getElementById('heartContainer');
-            for(let i=0; i<10; i++) {
+            for(let i=0; i<8; i++) {
                 const heart = document.createElement('div');
                 heart.classList.add('heart');
                 heart.innerHTML = '❤️';
                 heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
                 container.appendChild(heart);
-                setTimeout(() => heart.remove(), 4000);
+                setTimeout(() => heart.remove(), 3000);
             }
         }
+
+        kart.addEventListener('mousedown', startInteraction);
+        kart.addEventListener('mouseup', endInteraction);
+        kart.addEventListener('touchstart', startInteraction);
+        kart.addEventListener('touchend', endInteraction);
     </script>
 </body>
 </html>
