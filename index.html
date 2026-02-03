@@ -21,6 +21,7 @@
             height: 100vh;
             display: flex; align-items: center; justify-content: center;
             overflow: hidden; color: var(--yazi-renk);
+            touch-action: none; /* Kaydırma işlemi için tarayıcı kaydırmasını kapatır */
         }
 
         #heartContainer {
@@ -42,27 +43,31 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        /* PNG Resim Çerçevesi */
+        /* Dörtgen Kaydırılabilir Kart Tasarımı */
         .kedi-cerceve {
-            width: 180px; height: 180px;
+            width: 240px; height: 280px;
             margin: 20px auto;
-            border-radius: 50%;
+            border-radius: 20px;
             overflow: hidden;
             border: 5px solid white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
             background: white;
+            position: relative;
+            cursor: grab;
+            transition: transform 0.1s ease, opacity 0.3s ease;
+            user-select: none;
         }
 
         #kediResmi {
             width: 100%; height: 100%;
-            object-fit: cover; /* Resmi çerçeveye tam oturtur */
-            transition: transform 0.3s ease;
+            object-fit: cover;
+            pointer-events: none;
         }
 
         #mesaj {
-            min-height: 60px; font-size: 1.1rem; font-weight: 500;
+            min-height: 60px; font-size: 1.1rem; font-weight: 600;
             line-height: 1.4; margin-bottom: 25px;
+            transition: color 0.3s ease;
         }
 
         .buton {
@@ -76,6 +81,7 @@
 
         .heart {
             position: absolute; color: #ff4b2b; animation: fly linear forwards;
+            z-index: 0;
         }
 
         @keyframes fly {
@@ -89,15 +95,15 @@
     <div id="heartContainer"></div>
 
     <div class="container">
-        <h1>Sana Özel cimcime 💞</h1>
+        <h1>Sana Özel Cimcime 💞</h1>
         
-        <div class="kedi-cerceve">
-            <img id="kediResmi" src="https://placehold.co/400x400?text=Kedi+Yukleniyor" alt="Kedi">
+        <div class="kedi-cerceve" id="kediKarti">
+            <img id="kediResmi" src="https://api.imghippo.com/files/ukM4075mOo.jpg" alt="Kedi">
         </div>
 
-        <div id="mesaj">Sana özel bir sürprizim var. <br>Butona basmayı dene!</div>
+        <div id="mesaj">Resmi sağa veya sola kaydır! <br>Veya tıkla 🐾</div>
         
-        <button class="buton" onclick="etkilesimBaslat()">Tıkla 🐾</button>
+        <button class="buton" onclick="etkilesimBaslat()">Sıradaki 🐾</button>
     </div>
 
     <audio id="arkaPlanMuzik" loop>
@@ -105,7 +111,6 @@
     </audio>
 
     <script>
-        // BURAYA KENDİ PNG LİNKLERİNİ EKLE
         const kediResimleri = [
             "https://api.imghippo.com/files/ukM4075mOo.jpg",
             "https://api.imghippo.com/files/5932Hs.jpg",
@@ -114,37 +119,72 @@
         ];
 
         const mesajlar = [
-            "Bu site sadece senin yüzünü güldürmek için kodlandı! ✨",
-            "Dünyanın en tatlı kişisine küçük bir kedi selamı... 🐱",
-            "Moralin bozulduğunda bu linke gel, hep buradayız. 🐾",
+            "Bu site sadece senin için kodlandı! ✨",
+            "Dünyanın en tatlı kişisine selam... 🐱",
+            "Moralin bozulduğunda buraya gel. 🐾",
             "Gülümsemek sana çok yakışıyor! 😊"
         ];
 
         let muzikCalıyor = false;
+        let startX = 0;
+        const kart = document.getElementById('kediKarti');
+        const mesajElementi = document.getElementById('mesaj');
 
+        // Müzik ve İçerik Değiştirme
         function etkilesimBaslat() {
             const muzik = document.getElementById('arkaPlanMuzik');
             const resimElementi = document.getElementById('kediResmi');
-            const mesajElementi = document.getElementById('mesaj');
 
             if (!muzikCalıyor) {
                 muzik.play().catch(e => {});
                 muzikCalıyor = true;
             }
 
-            // Rastgele Seçimler
-            const rastgeleResim = kediResimleri[Math.floor(Math.random() * kediResimleri.length)];
-            const rastgeleMesaj = mesajlar[Math.floor(Math.random() * mesajlar.length)];
-
-            // İçerik Güncelleme
-            resimElementi.style.opacity = "0.5";
+            const rastgeleIndex = Math.floor(Math.random() * 4);
+            resimElementi.style.opacity = "0";
+            
             setTimeout(() => {
-                resimElementi.src = rastgeleResim;
-                mesajElementi.innerText = rastgeleMesaj;
+                resimElementi.src = kediResimleri[rastgeleIndex];
+                mesajElementi.innerText = mesajlar[rastgeleIndex];
+                mesajElementi.style.color = "var(--yazi-renk)";
                 resimElementi.style.opacity = "1";
             }, 200);
 
             createHeartEffect();
+        }
+
+        // SWIPE (KAYDIRMA) MANTIĞI
+        kart.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; });
+        kart.addEventListener('mousedown', (e) => { startX = e.clientX; });
+
+        kart.addEventListener('touchend', (e) => { handleSwipe(e.changedTouches[0].clientX); });
+        kart.addEventListener('mouseup', (e) => { handleSwipe(e.clientX); });
+
+        function handleSwipe(endX) {
+            const diff = endX - startX;
+            const threshold = 50; // Kaydırma hassasiyeti
+
+            if (diff > threshold) {
+                // SAĞA KAYDIRMA
+                mesajElementi.innerText = "Ya seni yerim :)";
+                mesajElementi.style.color = "#e91e63";
+                kart.style.transform = "translateX(100px) rotate(20deg)";
+                setTimeout(resetCard, 300);
+                createHeartEffect();
+            } else if (diff < -threshold) {
+                // SOLA KAYDIRMA
+                mesajElementi.innerText = "Bune aq";
+                mesajElementi.style.color = "#555";
+                kart.style.transform = "translateX(-100px) rotate(-20deg)";
+                setTimeout(resetCard, 300);
+            }
+        }
+
+        function resetCard() {
+            kart.style.transform = "translateX(0) rotate(0)";
+            // Yeni kedi getir
+            const resimElementi = document.getElementById('kediResmi');
+            resimElementi.src = kediResimleri[Math.floor(Math.random() * 4)];
         }
 
         function createHeartEffect() {
