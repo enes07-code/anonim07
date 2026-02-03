@@ -3,105 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sana Bir Mesaj Var 🐾</title>
+    <title>Sana Bir Sürprizim Var! 🐾</title>
     <style>
         :root {
             --ana-renk: #ffafbd;
             --ara-renk: #ffc3a0;
             --yazi-renk: #6d4c41;
+            --beyaz: rgba(255, 255, 255, 0.9);
         }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, var(--ana-renk), var(--ara-renk));
             height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            color: var(--yazi-renk);
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; color: var(--yazi-renk);
         }
 
-        /* Arka plandaki yüzen kalpler */
-        .kalp-arkaplan {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
+        #heartContainer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none;
         }
 
         .container {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.85);
-            padding: 30px;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            width: 85%;
-            max-width: 400px;
-            backdrop-filter: blur(10px);
-            border: 2px solid white;
+            position: relative; z-index: 1; text-align: center;
+            background: var(--beyaz); padding: 30px 20px;
+            border-radius: 40px; box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 85%; max-width: 380px;
+            backdrop-filter: blur(15px); border: 2px solid white;
+            animation: bounceIn 1s ease;
         }
 
-        h1 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
+        @keyframes bounceIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
-        .kedi-alanı {
-            font-size: 80px;
-            margin: 20px 0;
-            display: inline-block;
-            animation: mirlama 2s infinite ease-in-out;
+        /* PNG Resim Çerçevesi */
+        .kedi-cerceve {
+            width: 180px; height: 180px;
+            margin: 20px auto;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex; align-items: center; justify-content: center;
+            background: white;
         }
 
-        @keyframes mirlama {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1) rotate(5deg); }
+        #kediResmi {
+            width: 100%; height: 100%;
+            object-fit: cover; /* Resmi çerçeveye tam oturtur */
+            transition: transform 0.3s ease;
         }
 
         #mesaj {
-            min-height: 60px;
-            font-weight: 500;
-            line-height: 1.4;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
+            min-height: 60px; font-size: 1.1rem; font-weight: 500;
+            line-height: 1.4; margin-bottom: 25px;
         }
 
         .buton {
-            background: var(--yazi-renk);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            cursor: pointer;
-            transition: transform 0.2s active;
+            background: var(--yazi-renk); color: white; border: none;
+            padding: 18px; border-radius: 50px; font-size: 1.1rem;
+            font-weight: bold; width: 100%; cursor: pointer;
+            box-shadow: 0 8px 20px rgba(109, 76, 65, 0.3);
         }
 
-        .buton:active {
-            transform: scale(0.95);
-        }
+        .buton:active { transform: scale(0.95); }
 
-        /* Kalp yağmuru animasyonu */
         .heart {
-            position: absolute;
-            color: white;
-            animation: fly linear forwards;
+            position: absolute; color: #ff4b2b; animation: fly linear forwards;
         }
 
         @keyframes fly {
@@ -112,58 +86,77 @@
 </head>
 <body>
 
-    <div class="kalp-arkaplan" id="heartContainer"></div>
+    <div id="heartContainer"></div>
 
     <div class="container">
-        <h1>Günün Minnoşluğu 🐾</h1>
-        <div class="kedi-alanı" id="kedi">🐱</div>
-        <div id="mesaj">Sana özel bir sürpriz hazırladım. Patile bakalım!</div>
-        <button class="buton" onclick="mesajDegistir()">Patile 🐾</button>
+        <h1>Günün Sürprizi! 🐾</h1>
+        
+        <div class="kedi-cerceve">
+            <img id="kediResmi" src="https://placehold.co/400x400?text=Kedi+Yukleniyor" alt="Kedi">
+        </div>
+
+        <div id="mesaj">Sana özel bir sürprizim var. <br>Butona basmayı dene!</div>
+        
+        <button class="buton" onclick="etkilesimBaslat()">Patile 🐾</button>
     </div>
 
+    <audio id="arkaPlanMuzik" loop>
+        <source src="SARKI_LINKI.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
+        // BURAYA KENDİ PNG LİNKLERİNİ EKLE
+        const kediResimleri = [
+            "https://ibb.co/qM54CMHZ",
+            "https://ibb.co/mrgk8m21",
+            "https://ibb.co/vxXQztKR",
+            "https://ibb.co/0VpXSjw7"
+        ];
+
         const mesajlar = [
             "Bu site sadece senin yüzünü güldürmek için kodlandı! ✨",
             "Dünyanın en tatlı kişisine küçük bir kedi selamı... 🐱",
-            "Kodlar bile senin kadar samimi olamazdı ama denedik! 💻❤️",
-            "Eğer bu mesajı okuyorsan, bir kedi sana mırlıyor demektir. ✨",
-            "Moralin bozulduğunda bu linke gel, ben hep buradayım. 🐾"
+            "Moralin bozulduğunda bu linke gel, hep buradayız. 🐾",
+            "Gülümsemek sana çok yakışıyor! 😊"
         ];
 
-        const kediler = ["🐱", "😸", "😻", "😽", "😺", "🦁"];
+        let muzikCalıyor = false;
 
-        function mesajDegistir() {
+        function etkilesimBaslat() {
+            const muzik = document.getElementById('arkaPlanMuzik');
+            const resimElementi = document.getElementById('kediResmi');
             const mesajElementi = document.getElementById('mesaj');
-            const kediElementi = document.getElementById('kedi');
-            
-            // Rastgele seçim
-            const rastgeleMesaj = mesajlar[Math.floor(Math.random() * mesajlar.length)];
-            const rastgeleKedi = kediler[Math.floor(Math.random() * kediler.length)];
 
-            // İçeriği güncelle
-            mesajElementi.style.opacity = 0;
+            if (!muzikCalıyor) {
+                muzik.play().catch(e => {});
+                muzikCalıyor = true;
+            }
+
+            // Rastgele Seçimler
+            const rastgeleResim = kediResimleri[Math.floor(Math.random() * kediResimleri.length)];
+            const rastgeleMesaj = mesajlar[Math.floor(Math.random() * mesajlar.length)];
+
+            // İçerik Güncelleme
+            resimElementi.style.opacity = "0.5";
             setTimeout(() => {
+                resimElementi.src = rastgeleResim;
                 mesajElementi.innerText = rastgeleMesaj;
-                kediElementi.innerText = rastgeleKedi;
-                mesajElementi.style.opacity = 1;
+                resimElementi.style.opacity = "1";
             }, 200);
 
-            // Kalp efekti yarat
-            createHeart();
+            createHeartEffect();
         }
 
-        function createHeart() {
+        function createHeartEffect() {
             const container = document.getElementById('heartContainer');
             for(let i=0; i<10; i++) {
                 const heart = document.createElement('div');
                 heart.classList.add('heart');
                 heart.innerHTML = '❤️';
                 heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
-                heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+                heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
                 container.appendChild(heart);
-                
-                setTimeout(() => heart.remove(), 5000);
+                setTimeout(() => heart.remove(), 4000);
             }
         }
     </script>
