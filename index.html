@@ -1,147 +1,171 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tur ve Tatil Seçimi</title>
-<style>
-   * {box-sizing:border-box; }
-    body {
-    margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      color: #000000;
-      background: #0b132b
-        url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920&auto=format&fit=crop')
-        center/cover fixed no-repeat;
-    }
-    h1 {
-        text-align: center;
-        color: #333;
-    }
-    .container {
-        max-width: 600px;
-        margin: auto;
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    label {
-        display: block;
-        margin-top: 10px;
-        font-weight: bold;
-    }
-    select, input, button {
-        width: 100%;
-        padding: 8px;
-        margin-top: 5px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-    }
-    button {
-        background: #28a745;
-        color: white;
-        font-size: 16px;
-        border: none;
-        cursor: pointer;
-        margin-top: 15px;
-    }
-    button:hover {
-        background: #218838;
-    }
-    .result {
-        margin-top: 20px;
-        padding: 10px;
-        background: #e9ffe9;
-        border: 1px solid #b2ffb2;
-        border-radius: 5px;
-    }
-    .result img {
-        max-width: 100%;
-        margin-top: 10px;
-        border-radius: 5px;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sana Bir Mesaj Var 🐾</title>
+    <style>
+        :root {
+            --ana-renk: #ffafbd;
+            --ara-renk: #ffc3a0;
+            --yazi-renk: #6d4c41;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--ana-renk), var(--ara-renk));
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: var(--yazi-renk);
+        }
+
+        /* Arka plandaki yüzen kalpler */
+        .kalp-arkaplan {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 85%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+            border: 2px solid white;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .kedi-alanı {
+            font-size: 80px;
+            margin: 20px 0;
+            display: inline-block;
+            animation: mirlama 2s infinite ease-in-out;
+        }
+
+        @keyframes mirlama {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        #mesaj {
+            min-height: 60px;
+            font-weight: 500;
+            line-height: 1.4;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .buton {
+            background: var(--yazi-renk);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.2s active;
+        }
+
+        .buton:active {
+            transform: scale(0.95);
+        }
+
+        /* Kalp yağmuru animasyonu */
+        .heart {
+            position: absolute;
+            color: white;
+            animation: fly linear forwards;
+        }
+
+        @keyframes fly {
+            from { transform: translateY(100vh) scale(0); opacity: 1; }
+            to { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+    </style>
 </head>
 <body>
 
-<h1>Tur ve Tatil Seçimi</h1>
+    <div class="kalp-arkaplan" id="heartContainer"></div>
 
-<div class="container">
-    <label for="from">Nereden:</label>
-    <select id="from">
-        <option value="istanbul">İstanbul</option>
-        <option value="ankara">Ankara</option>
-        <option value="izmir">İzmir</option>
-    </select>
+    <div class="container">
+        <h1>Günün Minnoşluğu 🐾</h1>
+        <div class="kedi-alanı" id="kedi">🐱</div>
+        <div id="mesaj">Sana özel bir sürpriz hazırladım. Patile bakalım!</div>
+        <button class="buton" onclick="mesajDegistir()">Patile 🐾</button>
+    </div>
 
-    <label for="to">Nereye:</label>
-    <select id="to">
-        <option value="antalya">Antalya</option>
-        <option value="bodrum">Bodrum</option>
-        <option value="kapadokya">Kapadokya</option>
-    </select>
+    <script>
+        const mesajlar = [
+            "Bu site sadece senin yüzünü güldürmek için kodlandı! ✨",
+            "Dünyanın en tatlı kişisine küçük bir kedi selamı... 🐱",
+            "Kodlar bile senin kadar samimi olamazdı ama denedik! 💻❤️",
+            "Eğer bu mesajı okuyorsan, bir kedi sana mırlıyor demektir. ✨",
+            "Moralin bozulduğunda bu linke gel, ben hep buradayım. 🐾"
+        ];
 
-    <label for="date">Tarih:</label>
-    <input type="date" id="date">
+        const kediler = ["🐱", "😸", "😻", "😽", "😺", "🦁"];
 
-    <label for="people">Kişi Sayısı:</label>
-    <input type="number" id="people" min="1" value="1">
+        function mesajDegistir() {
+            const mesajElementi = document.getElementById('mesaj');
+            const kediElementi = document.getElementById('kedi');
+            
+            // Rastgele seçim
+            const rastgeleMesaj = mesajlar[Math.floor(Math.random() * mesajlar.length)];
+            const rastgeleKedi = kediler[Math.floor(Math.random() * kediler.length)];
 
-    <button onclick="hesapla()">Fiyat ve Detay Göster</button>
+            // İçeriği güncelle
+            mesajElementi.style.opacity = 0;
+            setTimeout(() => {
+                mesajElementi.innerText = rastgeleMesaj;
+                kediElementi.innerText = rastgeleKedi;
+                mesajElementi.style.opacity = 1;
+            }, 200);
 
-    <div class="result" id="result" style="display:none;"></div>
-</div>
+            // Kalp efekti yarat
+            createHeart();
+        }
 
-<script>
-function hesapla() {
-    const from = document.getElementById("from").value;
-    const to = document.getElementById("to").value;
-    const date = document.getElementById("date").value;
-    const people = parseInt(document.getElementById("people").value);
-
-    // Örnek fiyat listesi
-    const fiyatlar = {
-        antalya: 1500,
-        bodrum: 1800,
-        kapadokya: 1200
-    };
-
-    // Örnek görseller
-    const resimler = {
-        antalya: "https://www.bizevdeyokuz.com/wp-content/uploads/olimpos-kapak.jpg",
-        bodrum: "https://www.bizevdeyokuz.com/wp-content/uploads/mazi-koyu-bodrum.jpg",
-        kapadokya: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Cappadocia_balloon_trip.jpg/640px-Cappadocia_balloon_trip.jpg"
-    };
-
-    // Fiyat hesaplama
-    let fiyat = fiyatlar[to] * people;
-
-    // Detay metni
-    let detay = "";
-    if (to === "antalya") {
-        detay = "Antalya'nın eşsiz plajları ve tarihi dokusuyla harika bir tatil sizi bekliyor.";
-    } else if (to === "bodrum") {
-        detay = "Bodrum'un gece hayatı ve berrak denizinde unutulmaz bir tatil.";
-    } else if (to === "kapadokya") {
-        detay = "Kapadokya'nın peri bacaları ve balon turları ile masalsı bir deneyim.";
-    }
-
-    // Sonuç göster
-    const resultDiv = document.getElementById("result");
-    resultDiv.style.display = "block";
-    resultDiv.innerHTML = `
-        <h2>Seçtiğiniz Tatil</h2>
-        <p><strong>Nereden:</strong> ${from.toUpperCase()}</p>
-        <p><strong>Nereye:</strong> ${to.toUpperCase()}</p>
-        <p><strong>Tarih:</strong> ${date}</p>
-        <p><strong>Kişi Sayısı:</strong> ${people}</p>
-        <p><strong>Toplam Fiyat:</strong> ${fiyat} TL</p>
-        <p>${detay}</p>
-        <img src="${resimler[to]}" alt="${to}">
-    `;
-}
-</script>
-
+        function createHeart() {
+            const container = document.getElementById('heartContainer');
+            for(let i=0; i<10; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+                container.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 5000);
+            }
+        }
+    </script>
 </body>
 </html>
