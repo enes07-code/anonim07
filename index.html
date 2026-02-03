@@ -24,7 +24,6 @@
             touch-action: none;
         }
 
-        /* Bulanıklaşma için ana sarıcı */
         #mainWrapper {
             width: 100%; height: 100%;
             display: flex; align-items: center; justify-content: center;
@@ -38,14 +37,13 @@
             width: 90%; max-width: 380px;
         }
 
-        /* Resim Alanı (Dörtgen Yapıldı) */
         .kedi-cerceve {
             width: 100%; height: 320px;
             margin: 15px auto;
             border-radius: 20px;
             overflow: hidden;
             border: 4px solid white;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
             background: white;
             transition: transform 0.4s ease;
             cursor: grab;
@@ -53,14 +51,12 @@
 
         #kediResmi { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 
-        /* İtiraf Yazısı Odak Noktası */
         #itirafMetni {
             font-size: 1.1rem; font-weight: 600;
             margin: 15px 0; min-height: 60px;
             display: flex; align-items: center; justify-content: center;
         }
 
-        /* Swipe Tepki Metni */
         #reactionOverlay {
             position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
@@ -72,10 +68,8 @@
 
         @keyframes popOut { 0% { scale: 0.5; opacity: 0; } 50% { scale: 1.1; opacity: 1; } 100% { scale: 1; opacity: 0; } }
 
-        /* Alt Talimat */
         .talimat { font-size: 0.75rem; opacity: 0.6; margin-top: 5px; line-height: 1.3; }
 
-        /* Siyah Final Ekranı */
         #finalScreen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; color: #fff;
@@ -117,7 +111,9 @@
         <p style="font-size: 0.75rem; opacity: 0.4; margin-top: 50px;">tekrar için ekranı yenile</p>
     </div>
 
-    <audio id="bgMusic" loop><source src="aaudi.mp3" type="audio/mpeg"></audio>
+    <audio id="bgMusic" loop preload="auto">
+        <source src="aaudi.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
         const icerik = [
@@ -132,17 +128,22 @@
         const itiraf = document.getElementById('itirafMetni');
         const overlay = document.getElementById('reactionOverlay');
         const wrapper = document.getElementById('mainWrapper');
+        const music = document.getElementById('bgMusic');
 
-        function initMusic() {
-            if(!isMusicPlay) { 
-                document.getElementById('bgMusic').play().catch(() => {}); 
-                isMusicPlay = true; 
+        // MÜZİĞİ TETİKLEMEK İÇİN FONKSİYON
+        function playMusic() {
+            if(!isMusicPlay) {
+                music.play().then(() => {
+                    isMusicPlay = true;
+                }).catch(e => {
+                    console.log("Müzik engellendi, etkileşim bekleniyor.");
+                });
             }
         }
 
         function handleStart(e) {
             startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-            initMusic();
+            playMusic(); // İlk dokunuşta müziği zorla başlatır
         }
 
         function handleEnd(e) {
@@ -206,10 +207,14 @@
             }
         }
 
+        // Dokunma ve Mouse hareketlerini dinle
         card.addEventListener('mousedown', handleStart);
         card.addEventListener('mouseup', handleEnd);
         card.addEventListener('touchstart', handleStart);
         card.addEventListener('touchend', handleEnd);
+        
+        // Ekstra: Sayfanın herhangi bir yerine tıklarsa da müzik başlasın
+        document.body.addEventListener('click', playMusic, {once: true});
     </script>
 </body>
 </html>
